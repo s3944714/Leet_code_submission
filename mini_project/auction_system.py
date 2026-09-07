@@ -26,7 +26,7 @@ balances = {
 # 2. Create a list/dict of auction items, each with a name and a
 #    "true value" used only by the bot's logic, hidden from you.
 #    e.g. {"name": "Painting", "true_value": 800}
-auction_items = [
+auction_storage = [
     {"name": "Vintage 1968 Rolex Submariner", "true_value": 12500},
     {"name": "Signed Salvador Dalí Lithograph", "true_value": 3200},
     {"name": "1950s Fender Stratocaster Guitar", "true_value": 8500},
@@ -54,10 +54,29 @@ print("One item will be bidded at a time, and the highest bid will win.")
 # ------------------------------------------------------------
 # 1. Show the item to both players.
 
-
+def single_item(item):
+    for key, value in item.items():
+            print(f"{key}: {value}")
+    print("_"*20)
+    return item
 
 # 2. Ask you for a bid (validate: must be a number, must not
 #    exceed your current balance).
+def bid(current_balance):
+    while True:
+        try:
+            bidding = int(input("Enter your bid"))
+            if bidding > current_balance:
+                print(f"The bid is too high, your current balance is :{current_balance}")   
+            else:
+                print("Valid Bid")
+                return bidding
+        except ValueError:
+            print("This is not a valid number")
+    
+
+    
+
 # 3. Write bot_decide_bid(item, bot_balance) that:
 #    - Takes item info and bot's remaining balance as parameters
 #    - Returns a bid amount based on some logic (see Phase 4)
@@ -108,4 +127,6 @@ print("One item will be bidded at a time, and the highest bid will win.")
 #   game and adjust its own bidding to counter you.
 # - Add a difficulty setting that changes bot aggressiveness.
 #
-# ============================================================
+# ===========================================================
+
+
