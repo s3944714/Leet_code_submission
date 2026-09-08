@@ -2,7 +2,9 @@
 # AI AUCTION SYSTEM CLI - PROJECT SPEC
 # You vs. a Python "AI" bot, bidding on items with starting balances
 # ============================================================
-#
+
+import random 
+
 # CONCEPTS USED:
 # - Variables & data types (input casting to float/int)
 # - Control flow (if/elif/else)
@@ -62,10 +64,10 @@ def single_item(item):
 
 # 2. Ask you for a bid (validate: must be a number, must not
 #    exceed your current balance).
-def bid(current_balance):
+def user_bid(current_balance):
     while True:
         try:
-            bidding = int(input("Enter your bid"))
+            bidding = int(input("Enter your bid: "))
             if bidding > current_balance:
                 print(f"The bid is too high, your current balance is :{current_balance}")   
             else:
@@ -74,16 +76,35 @@ def bid(current_balance):
         except ValueError:
             print("This is not a valid number")
     
-
-    
-
 # 3. Write bot_decide_bid(item, bot_balance) that:
 #    - Takes item info and bot's remaining balance as parameters
 #    - Returns a bid amount based on some logic (see Phase 4)
+def bot_decide_bid(item, bot_balance):
+     bot_bid = random.randint(0, bot_balance)
+     return bot_bid
+
+
 # 4. Compare your bid vs. the bot's bid.
 # 5. Deduct the winning bid from the winner's balance in the
 #    balances dict.
 # 6. Print who won the item and for how much.
+def run_round(item, balances):
+    single_item(item)
+    user_amount = user_bid(balances["user"])
+    bot_amount = bot_decide_bid(item, balances["bot"])
+    if user_amount < bot_amount:
+         print(f"Computer has won with a bid of {bot_amount}")   
+         balances["bot"] -= bot_amount
+         print(f"Bot Balance is {balances['bot']}")                   
+    elif user_amount > bot_amount:
+         print(f"you have won with a bid of {user_amount}")         
+         balances["user"] -= user_amount
+         print(f"user Balance is {balances['user']}")
+    elif user_amount == bot_amount:
+         print("No one wins")
+    return
+
+
 #
 # ------------------------------------------------------------
 # PHASE 3 - Multi-item loop
@@ -96,6 +117,13 @@ def bid(current_balance):
 # 4. After all items are gone, print a summary: what each player
 #    won, and remaining balance.
 #
+
+for item in auction_storage:
+     run_round(item, balances)
+
+
+
+
 # ------------------------------------------------------------
 # PHASE 4 - Bot logic (pick a level)
 # ------------------------------------------------------------
