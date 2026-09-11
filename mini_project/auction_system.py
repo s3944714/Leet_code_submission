@@ -13,7 +13,6 @@ balances = {
     "bot": 1000
 }
 
-# Ownership tracking - each player's list of won items
 ownership = {
     "user": [],
     "bot": []
@@ -37,6 +36,8 @@ print("Welcome to the Auction House")
 print("--------------Rules------------------")
 print("One item will be bidded at a time, and the highest bid will win.")
 
+# Ask once, before the auction starts, which bot difficulty to use
+difficulty = input("Choose bot difficulty (simple/medium/smart): ")
 
 # ------------------------------------------------------------
 # PHASE 2 - Single-item round
@@ -61,15 +62,43 @@ def user_bid(current_balance):
             print("This is not a valid number")
 
 
-def bot_decide_bid(item, bot_balance):
+# ------------------------------------------------------------
+# PHASE 4 - Bot logic (pick a level)
+# ------------------------------------------------------------
+def simple_bid(item, bot_balance):
     bot_bid = random.randint(0, bot_balance)
     return bot_bid
+
+
+def medium_bid(item, bot_balance):
+    percentage = 0.9
+    medium_amount = item["true_value"] * percentage
+    if medium_amount > bot_balance:
+        bot_bid = bot_balance
+    else:
+        bot_bid = medium_amount
+    return int(bot_bid)
+
+
+def smart_bid(item, bot_balance, items_remaining):
+    aggressiveness = 0.7
+    max_bid = (bot_balance / items_remaining) * aggressiveness
+    return int(max_bid)
+
+
+def bot_decide_bid(item, bot_balance, difficulty, items_remaining):
+    if difficulty == "simple":
+        return simple_bid(item, bot_balance)
+    elif difficulty == "medium":
+        return medium_bid(item, bot_balance)
+    elif difficulty == "smart":
+        return smart_bid(item, bot_balance, items_remaining)
 
 
 # ------------------------------------------------------------
 # PHASE 3 - Multi-item loop
 # ------------------------------------------------------------
-def run_round(item, balances, ownership):
+def run_round(item, balances, ownership, difficulty, items_remaining):
     single_item(item)
 
     if balances["user"] <= 0:
@@ -80,7 +109,7 @@ def run_round(item, balances, ownership):
     if balances["bot"] <= 0:
         bot_amount = 0
     else:
-        bot_amount = bot_decide_bid(item, balances["bot"])
+        bot_amount = bot_decide_bid(item, balances["bot"], difficulty, items_remaining)
 
     if user_amount < bot_amount:
         print(f"Computer has won with a bid of {bot_amount}")
@@ -92,37 +121,20 @@ def run_round(item, balances, ownership):
         balances["user"] -= user_amount
         print(f"user Balance is {balances['user']}")
         ownership["user"].append(item["name"])
-        
     else:
         print("No one wins")
 
     return
 
 
+items_remaining = len(auction_storage)
 for item in auction_storage:
-    run_round(item, balances, ownership)
+    run_round(item, balances, ownership, difficulty, items_remaining)
+    items_remaining -= 1
+
 print(f"The user has won {ownership['user']} and his current balance is : {balances['user']}")
 print(f"The bot has won {ownership['bot']} and his current balance is : {balances['bot']}")
-    
 
-# TODO Phase 3, Step 4: after the loop finishes, print a summary
-# of what each player won (from `ownership`) and their final
-# balances (from `balances`)
-
-
-# ------------------------------------------------------------
-# PHASE 4 - Bot logic (pick a level)
-# ------------------------------------------------------------
-# - Simple: bot bids a random amount between 0 and its remaining
-#   balance (random.uniform).
-# - Medium: bot bids a percentage of the item's true_value
-#   (e.g. up to 90%), capped by its remaining balance.
-# - Smart (stretch): bot factors in items remaining and budget
-#   left, so it doesn't blow its whole balance on the first item.
-def bot_level(bot_balance):
-    simple_bot = random.randint(0, bot_balance)
-    percentage = 90
-    medium_bot = bot_balance * (percentage / 100)
 
 # ------------------------------------------------------------
 # PHASE 5 - Scoring / end-game
