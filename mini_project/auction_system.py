@@ -139,10 +139,25 @@ print(f"The bot has won {ownership['bot']} and his current balance is : {balance
 # ------------------------------------------------------------
 # PHASE 5 - Scoring / end-game
 # ------------------------------------------------------------
-# 1. Compute each player's net worth = remaining cash + sum of
-#    true_value of items they won.
-# 2. Declare a winner based on net worth.
-# 3. Optional: print a table showing item-by-item who bid what.
+def net_worth(remaining, items_won):
+    total_value = 0
+    for item_name in items_won:
+        for entry in auction_storage:
+            if entry["name"] == item_name:
+                total_value += entry["true_value"]
+    return remaining + total_value
+
+
+user_net_worth = net_worth(balances["user"], ownership["user"])
+bot_net_worth = net_worth(balances["bot"], ownership["bot"])
+
+if user_net_worth > bot_net_worth:
+    print(f"You win overall! Your net worth: {user_net_worth}, Bot's net worth: {bot_net_worth}")
+elif user_net_worth < bot_net_worth:
+    print(f"You lose Overall, Your networth:{user_net_worth}, Bot's net worth: {bot_net_worth}")
+else:
+    print(f"it is a tie")
+
 
 # ------------------------------------------------------------
 # STRETCH GOALS
