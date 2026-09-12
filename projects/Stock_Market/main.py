@@ -106,6 +106,23 @@ print(f"Your goal: maximize your net worth by the end of the {total_days} days")
 # ------------------------------------------------------------
 # 1. Ask the player to choose a difficulty at the start of the
 #    game (e.g. "easy", "normal", "hard").
+
+while True:
+    choice = input("Enter the difficulty level: Easy, Medium, Hard .").strip().lower()
+    if choice == "easy":
+        difficulty_multiplier = 0.5
+        break
+    elif choice == "medium":
+        difficulty_multiplier = 1.5
+        break
+    elif choice == "hard":
+        difficulty_multiplier = 3.0
+        break
+    else:
+        print("Invalid word, try again")
+
+
+
 # 2. Difficulty should affect how unpredictable the market is:
 #    - Easy: lower volatility, price trends are more consistent
 #      and easier to read day-to-day.
