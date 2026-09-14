@@ -21,6 +21,8 @@
 # PHASE 1 - Setup
 # ------------------------------------------------------------
 
+import random
+
 total_days = 30
 stocks = {
     # Blue-chip style: High starting price, low volatility, flat trend
@@ -108,7 +110,7 @@ print(f"Your goal: maximize your net worth by the end of the {total_days} days")
 #    game (e.g. "easy", "normal", "hard").
 
 while True:
-    choice = input("Enter the difficulty level: Easy, Medium, Hard .").strip().lower()
+    choice = input("Enter the difficulty level (Easy, Medium, Hard): ").strip().lower()
     if choice == "easy":
         difficulty_multiplier = 0.5
         break
@@ -120,6 +122,7 @@ while True:
         break
     else:
         print("Invalid word, try again")
+
 
 
 
@@ -137,6 +140,23 @@ while True:
 # ------------------------------------------------------------
 # PHASE 3 - Daily price simulation (one "day" = one loop iteration)
 # ------------------------------------------------------------
+
+def update_price (stock_data, choice):
+    scaled_volatility =  stock_data["volatility"] * choice
+    daily_pct_change = stock_data["trend"] + random.gauss(0, scaled_volatility)
+    stock_data["price"] = stock_data["price"] * (1 + daily_pct_change)
+    return  daily_pct_change, stock_data["price"]
+
+def simulate_day(stocks, price_history, choice):
+    for ticker, data in stocks.items():
+        pct_change, new_price = update_price(data, choice)
+        price_history[ticker].append(new_price)
+        print(f"Summary of the Day")
+        print(f"{ticker}: ${new_price} ({pct_change}% change)")
+
+    return
+
+
 # 1. Write a function update_price(stock_data, difficulty) that:
 #    - Takes one stock's info dictionary (price, volatility, trend)
 #      and the difficulty setting
