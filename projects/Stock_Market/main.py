@@ -140,23 +140,6 @@ while True:
 # ------------------------------------------------------------
 # PHASE 3 - Daily price simulation (one "day" = one loop iteration)
 # ------------------------------------------------------------
-
-def update_price (stock_data, choice):
-    scaled_volatility =  stock_data["volatility"] * choice
-    daily_pct_change = stock_data["trend"] + random.gauss(0, scaled_volatility)
-    stock_data["price"] = stock_data["price"] * (1 + daily_pct_change)
-    return  daily_pct_change, stock_data["price"]
-
-def simulate_day(stocks, price_history, choice):
-    for ticker, data in stocks.items():
-        pct_change, new_price = update_price(data, choice)
-        price_history[ticker].append(new_price)
-        print(f"Summary of the Day")
-        print(f"{ticker}: ${new_price} ({pct_change}% change)")
-
-    return
-
-
 # 1. Write a function update_price(stock_data, difficulty) that:
 #    - Takes one stock's info dictionary (price, volatility, trend)
 #      and the difficulty setting
@@ -172,6 +155,21 @@ def simulate_day(stocks, price_history, choice):
 #    - Appends the new price onto price_history for that stock
 # 3. Print a simple day summary after each simulated day: each
 #    stock's ticker, new price, and % change from the previous day.
+
+def update_price (stock_data, choice):
+    scaled_volatility =  stock_data["volatility"] * choice
+    daily_pct_change = stock_data["trend"] + random.gauss(0, scaled_volatility)
+    stock_data["price"] = stock_data["price"] * (1 + daily_pct_change)
+    return  daily_pct_change, stock_data["price"]
+
+def simulate_day(stocks, price_history, choice):
+    for ticker, data in stocks.items():
+        pct_change, new_price = update_price(data, choice)
+        price_history[ticker].append(new_price)
+        print(f"Summary of the Day")
+        print(f"{ticker}: ${new_price} ({pct_change}% change)")
+    return
+
 #
 # ------------------------------------------------------------
 # PHASE 4 - Player actions each day
@@ -180,6 +178,11 @@ def simulate_day(stocks, price_history, choice):
 #    - Current cash balance
 #    - Current holdings (shares per stock) and their current value
 #    - Current prices for all stocks
+def show_daily_status(day, portfolio, stocks):
+    print(f"Day {day}")
+    print(f"p")
+    return
+
 # 2. Present a menu of actions:
 #    - Buy shares of a stock
 #    - Sell shares of a stock
@@ -198,6 +201,13 @@ def simulate_day(stocks, price_history, choice):
 #    "FOOD recalled products - -10%"), applied as an extra
 #    multiplier on top of the normal daily price update.
 #
+
+
+
+
+
+
+
 # ------------------------------------------------------------
 # PHASE 5 - Data science elements
 # ------------------------------------------------------------
