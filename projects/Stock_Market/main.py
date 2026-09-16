@@ -189,13 +189,45 @@ def show_daily_status(day, portfolio, stocks):
         print(f"{ticker}: ${data['price']:.2f} | {shares} shares, worth ${value:.2f}")
     return
 
-
-
 # 2. Present a menu of actions:
 #    - Buy shares of a stock
 #    - Sell shares of a stock
 #    - View price history / stats for a stock (Phase 5)
 #    - Do nothing / advance to next day
+
+def player_menu():
+    print("What would you like to do?")
+    print("1. Buy shares")
+    print("2. Sell shares")
+    print("3. View price history / stats for a stock")
+    print("4. Do nothing / advance to next day")
+    choice = input("Enter your choice (1-4): ").strip()
+    return choice
+
+def run_day(day, portfolio, stocks, price_history):
+    show_daily_status(day, portfolio, stocks)
+    while True:
+        choice = player_menu()
+        if choice == "1":
+            def buy_stuck():
+                    tinker = input("Which stock do you want to buy? ").strip.upper()
+                    if tinker not in stocks:
+                        print("Not a valid Stock")
+                        return
+                    shares = int(input("How many shares do you want to buy?"))
+                    cost = shares * stocks[tinker]["price"]
+                    if cost > portfolio["CASH"]:
+                        print(f"Try again, you do not have enough cash, it would cost #{cost:.2f}, you have ${portfolio['CASH']:.2f}")
+                        return
+                    portfolio["CASH"] -= cost
+                    portfolio[tinker] += shares
+                    print(f"Bought {shares} shares of {tinker} for ${cost:.2f}.")
+                    return
+            return
+                
+
+
+
 # 3. Buy logic: ask which stock and how many shares; validate
 #    they have enough cash (shares * current_price <= cash);
 #    deduct cash, add shares to portfolio.
