@@ -180,8 +180,16 @@ def simulate_day(stocks, price_history, choice):
 #    - Current prices for all stocks
 def show_daily_status(day, portfolio, stocks):
     print(f"Day {day}")
-    print(f"p")
+    print(f"Cash #{portfolio['CASH']}")
+    for ticker, data in stocks.items():
+        print(f"{ticker}: ${data['price']:.2f}")
+    for ticker, data in stocks.items():
+        shares = portfolio[ticker]
+        value = shares * data["price"]
+        print(f"{ticker}: ${data['price']:.2f} | {shares} shares, worth ${value:.2f}")
     return
+
+
 
 # 2. Present a menu of actions:
 #    - Buy shares of a stock
