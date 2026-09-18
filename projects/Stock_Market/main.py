@@ -209,20 +209,36 @@ def run_day(day, portfolio, stocks, price_history):
     while True:
         choice = player_menu()
         if choice == "1":
-            def buy_stuck():
-                    tinker = input("Which stock do you want to buy? ").strip.upper()
-                    if tinker not in stocks:
+            def buy_stock():
+                    ticker = input("Which stock do you want to buy? ").strip.upper()
+                    if ticker not in stocks:
                         print("Not a valid Stock")
                         return
-                    shares = int(input("How many shares do you want to buy?"))
-                    cost = shares * stocks[tinker]["price"]
+                    try:
+                        shares = int(input("How many shares do you want to buy?"))
+                        if shares <= 0:
+                            print("You must buy at least 1 share")
+                            return
+                    except ValueError:
+                        print("Enter a valid whole number")
+                        return
+                    cost = shares * stocks[ticker]["price"]
                     if cost > portfolio["CASH"]:
-                        print(f"Try again, you do not have enough cash, it would cost #{cost:.2f}, you have ${portfolio['CASH']:.2f}")
+                        print(f"Try again, you do not have enough cash, it would cost ${cost:.2f}, you have ${portfolio['CASH']:.2f}")
                         return
                     portfolio["CASH"] -= cost
-                    portfolio[tinker] += shares
-                    print(f"Bought {shares} shares of {tinker} for ${cost:.2f}.")
+                    portfolio[ticker] += shares
+                    print(f"Bought {shares} shares of {ticker} for ${cost:.2f}.")
                     return
+            
+        elif choice == "2":
+            def sell_stock():
+                ticker = input("Which stock do you want to sell? ").strip.lower()
+                if ticker not in stocks:
+                    print("Not a valid stock")
+
+                
+                return
             return
                 
 
