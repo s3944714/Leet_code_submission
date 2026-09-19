@@ -204,44 +204,52 @@ def player_menu():
     choice = input("Enter your choice (1-4): ").strip()
     return choice
 
+def buy_stock(portfolio, stocks):
+    ticker = input("Which stock do you want to buy? ").strip().upper()
+    if ticker not in stocks:
+        print("Not a valid Stock")
+        return
+    try:
+        shares = int(input("How many shares do you want to buy? "))
+        if shares <= 0:
+            print("You must buy at least 1 share")
+            return
+    except ValueError:
+        print("Enter a valid whole number")
+        return
+    cost = shares * stocks[ticker]["price"]
+    if cost > portfolio["CASH"]:
+        print(f"Try again, you do not have enough cash, it would cost ${cost:.2f}, you have ${portfolio['CASH']:.2f}")
+        return
+    portfolio["CASH"] -= cost
+    portfolio[ticker] += shares
+    print(f"Bought {shares} shares of {ticker} for ${cost:.2f}.")
+    return
+
+def sell_stock(portfolio, stocks):
+    ticker = input("Which stock do you want to sell? ").strip().upper()
+    if ticker not in stocks:
+        print("Not a valid Stock")
+        return
+    return
+
 def run_day(day, portfolio, stocks, price_history):
     show_daily_status(day, portfolio, stocks)
     while True:
         choice = player_menu()
         if choice == "1":
-            def buy_stock():
-                    ticker = input("Which stock do you want to buy? ").strip.upper()
-                    if ticker not in stocks:
-                        print("Not a valid Stock")
-                        return
-                    try:
-                        shares = int(input("How many shares do you want to buy?"))
-                        if shares <= 0:
-                            print("You must buy at least 1 share")
-                            return
-                    except ValueError:
-                        print("Enter a valid whole number")
-                        return
-                    cost = shares * stocks[ticker]["price"]
-                    if cost > portfolio["CASH"]:
-                        print(f"Try again, you do not have enough cash, it would cost ${cost:.2f}, you have ${portfolio['CASH']:.2f}")
-                        return
-                    portfolio["CASH"] -= cost
-                    portfolio[ticker] += shares
-                    print(f"Bought {shares} shares of {ticker} for ${cost:.2f}.")
-                    return
-            
+            buy_stock(portfolio, stocks)
         elif choice == "2":
-            def sell_stock():
-                ticker = input("Which stock do you want to sell? ").strip.lower()
-                if ticker not in stocks:
-                    print("Not a valid stock")
-
-                
-                return
-            return
-                
-
+            ...   # sell_stock(), not written yet
+        elif choice == "3":
+            ...   # Phase 5, not built yet
+        elif choice == "4":
+            break
+        else:
+            print("Invalid choice, try again")
+    return
+            
+      
 
 
 # 3. Buy logic: ask which stock and how many shares; validate
