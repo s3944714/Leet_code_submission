@@ -231,6 +231,27 @@ def sell_stock(portfolio, stocks):
     if ticker not in stocks:
         print("Not a valid Stock")
         return
+    if ticker not in portfolio or portfolio[ticker] <= 0:
+        print(f"You do not own any shares of {ticker}.")
+        return
+
+    try:
+        shares = int(input("How many shares do you want to sell? "))
+        if shares <= 0:
+            print("You must sell at least 1 share")
+            return
+    except ValueError:
+        print("Enter a proper value")
+        return
+
+    if shares > portfolio[ticker]:
+        print(f"You cannot sell {shares} shares. You only own {portfolio[ticker]} shares of {ticker}.")
+        return
+
+    proceeds = shares * stocks[ticker]["price"]
+    portfolio[ticker] -= shares
+    portfolio["CASH"] += proceeds
+    print(f"Sold {shares} shares of {ticker} for ${proceeds:.2f}.")
     return
 
 def run_day(day, portfolio, stocks, price_history):
@@ -240,7 +261,7 @@ def run_day(day, portfolio, stocks, price_history):
         if choice == "1":
             buy_stock(portfolio, stocks)
         elif choice == "2":
-            ...   # sell_stock(), not written yet
+            sell_stock(portfolio, stocks)
         elif choice == "3":
             ...   # Phase 5, not built yet
         elif choice == "4":
