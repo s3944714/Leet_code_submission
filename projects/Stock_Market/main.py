@@ -77,6 +77,22 @@ price_history = {
     "RSTR": [stocks["RSTR"]["price"]],
     "SAFE": [stocks["SAFE"]["price"]],
 }
+
+news_events = [
+    {"headline": "{ticker} announces breakthrough product launch next week!", "impact": 0.18},
+    {"headline": "{ticker} facing a regulatory investigation.", "impact": -0.15},
+    {"headline": "{ticker} reports earnings far above expectations.", "impact": 0.12},
+    {"headline": "{ticker} issues a profit warning to investors.", "impact": -0.14},
+    {"headline": "{ticker} secures a major new partnership deal.", "impact": 0.10},
+    {"headline": "{ticker} recalls a defective product line.", "impact": -0.20},
+    {"headline": "{ticker} announces an unexpected executive resignation.", "impact": -0.08},
+    {"headline": "{ticker} wins a significant industry award.", "impact": 0.07},
+    {"headline": "{ticker} is rumored to be an acquisition target.", "impact": 0.22},
+    {"headline": "{ticker} suffers a major data breach.", "impact": -0.18},
+]
+pending_events = []
+
+
 print("-----Welcome to the stock market-----")
 print(f"You begin the game with ${portfolio['CASH']} Dollars")
 print(f"The game runs on: {total_days} days")
@@ -250,6 +266,10 @@ def sell_stock(portfolio, stocks):
     portfolio["CASH"] += proceeds
     print(f"Sold {shares} shares of {ticker} for ${proceeds:.2f}.")
     return
+
+def announce_news(stocks, news_events, pending_events, day, difficulty):
+    return
+
 
 def run_day(day, portfolio, stocks, price_history):
     show_daily_status(day, portfolio, stocks)
