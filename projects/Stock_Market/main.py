@@ -123,9 +123,6 @@ while True:
     else:
         print("Invalid word, try again")
 
-
-
-
 # 2. Difficulty should affect how unpredictable the market is:
 #    - Easy: lower volatility, price trends are more consistent
 #      and easier to read day-to-day.
@@ -179,14 +176,14 @@ def simulate_day(stocks, price_history, choice):
 #    - Current holdings (shares per stock) and their current value
 #    - Current prices for all stocks
 def show_daily_status(day, portfolio, stocks):
-    print(f"Day {day}")
-    print(f"Cash #{portfolio['CASH']}")
-    for ticker, data in stocks.items():
-        print(f"{ticker}: ${data['price']:.2f}")
+    print(f"\n----- Day {day} -----")
+    print(f"Cash: ${portfolio['CASH']:.2f}")
+    print("-" * 40)
     for ticker, data in stocks.items():
         shares = portfolio[ticker]
         value = shares * data["price"]
         print(f"{ticker}: ${data['price']:.2f} | {shares} shares, worth ${value:.2f}")
+    print("-" * 40)
     return
 
 # 2. Present a menu of actions:
@@ -270,7 +267,11 @@ def run_day(day, portfolio, stocks, price_history):
             print("Invalid choice, try again")
     return
             
-      
+for day in range(1,31):
+    run_day(day, portfolio, stocks, price_history)
+    simulate_day(stocks,price_history,difficulty_multiplier)
+
+
 
 
 # 3. Buy logic: ask which stock and how many shares; validate
