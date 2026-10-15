@@ -258,42 +258,8 @@ def trigger_news(stocks, pending_events, day):
 # PHASE 5 - Data science elements (numpy)
 # ------------------------------------------------------------
 def moving_average(price_list, window):
-    # Slice the last `window` prices, then average them
     recent_prices = price_list[-window:]
     return np.mean(recent_prices)
-
-
-def percent_change(price_list):
-    # Overall % change from the first recorded price to the latest
-    first_price = price_list[0]
-    latest_price = price_list[-1]
-    change = (latest_price - first_price) / first_price
-    return change * 100
-
-
-def volatility_score(price_list):
-    # Need at least 2 prices to have one day-to-day change
-    if len(price_list) < 2:
-        return 0.0
-    prices = np.array(price_list)
-    daily_changes = np.diff(prices)            # differences between consecutive days
-    pct_changes = daily_changes / prices[:-1]  # convert to % change vs the "before" price
-    return np.std(pct_changes) * 100
-
-
-def view_stats(stocks, price_history):
-    ticker = input("Which stock do you want stats for? ").strip().upper()
-    if ticker not in stocks:
-        print("Not a valid Stock")
-        return
-    prices = price_history[ticker]
-    print(f"\n----- {ticker} Stats -----")
-    print(f"Current price:      ${stocks[ticker]['price']:.2f}")
-    print(f"5-day moving avg:   ${moving_average(prices, 5):.2f}")
-    print(f"Change since day 1: {percent_change(prices):.2f}%")
-    print(f"Volatility score:   {volatility_score(prices):.2f}")
-    print("-" * 40)
-    return
 
 
 def run_day(day, portfolio, stocks, price_history):
